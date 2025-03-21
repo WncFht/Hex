@@ -40,8 +40,26 @@ class Game:
         self.current_color = 'R'  # 红方先手
         self.move_history = []
         self.start_time = time.time()
+        self.difficulty = 'medium'  # 默认中等难度
+        self.search_times = {
+            'easy': 2.0,    # 简单难度搜索2秒
+            'medium': 5.0,  # 中等难度搜索5秒
+            'hard': 10.0    # 困难难度搜索10秒
+        }
         logging.info("Game initialized with board size %d", board_size)
         self._log_board_state()
+
+    def set_difficulty(self, difficulty: str):
+        """设置AI难度
+        Args:
+            difficulty: 难度级别 ('easy', 'medium', 'hard')
+        """
+        if difficulty in self.search_times:
+            old_difficulty = self.difficulty
+            self.difficulty = difficulty
+            logging.info(f"AI难度从 {old_difficulty} 更改为 {difficulty}")
+        else:
+            logging.warning(f"无效的难度设置: {difficulty}，使用默认难度: {self.difficulty}")
 
     def handle_first_move(self) -> str:
         """处理先手情况
@@ -179,7 +197,7 @@ class Game:
         Returns:
             str: 移动坐标
         """
-        logging.info(f"请求AI移动 - 当前玩家:{self.current_color}, AI颜色:{self.my_color or '未设置'}")
+        logging.info(f"请求AI移动 - 当前玩家:{self.current_color}, AI颜色:{self.my_color or '未设置'}, 难度:{self.difficulty}")
         
         # 检查是否已经结束
         winner = self.get_winner()
@@ -211,10 +229,13 @@ class Game:
             self.mcts.hex = self.board
             self.mcts.color = self.current_color
         
+        # 根据难度获取搜索时间
+        time_limit = self.search_times.get(self.difficulty, 5.0)
+        logging.info(f"开始MCTS搜索...难度: {self.difficulty}, 搜索时间: {time_limit}秒")
+        
         # 执行搜索
-        logging.info("开始MCTS搜索...")
         start_time = time.time()
-        move, ratio, count, time_spent = self.mcts.search(time_limit=9.99)
+        move, ratio, count, time_spent = self.mcts.search(time_limit=time_limit)
         
         if move:
             move_str = self._format_move(move[0], move[1])

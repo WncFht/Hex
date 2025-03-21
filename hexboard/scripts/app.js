@@ -45,7 +45,7 @@ createApp({
             if (this.gameMode === 'ai') {
                 // 在人机对弈模式下，初始化后端游戏
                 this.isAIThinking = true;
-                const response = await this.api.initGame(true); // 玩家先手
+                const response = await this.api.initGame(true, this.aiLevel); // 玩家先手，传递难度
                 this.isAIThinking = false;
 
                 if (response && response.success) {
@@ -69,7 +69,11 @@ createApp({
             const x = event.clientX - rect.left;
             const y = event.clientY - rect.top;
 
-            const hexCoord = this.hexBoard.getHexFromPoint(x, y);
+            // 将鼠标坐标转换为相对于画布的坐标（考虑缩放）
+            const scaledX = x * (this.hexBoard.canvas.width / rect.width);
+            const scaledY = y * (this.hexBoard.canvas.height / rect.height);
+
+            const hexCoord = this.hexBoard.getHexFromPoint(scaledX, scaledY);
             if (!hexCoord) return;
 
             const { row, col } = hexCoord;
@@ -94,8 +98,8 @@ createApp({
                     this.isAIThinking = true;
 
                     try {
-                        // 发送玩家的移动到后端
-                        const response = await this.api.makeMove(moveStr);
+                        // 发送玩家的移动到后端，传递难度
+                        const response = await this.api.makeMove(moveStr, this.aiLevel);
 
                         if (response && response.success) {
                             // 如果后端返回了AI的移动
@@ -158,7 +162,7 @@ createApp({
                 this.isAIThinking = true;
 
                 try {
-                    const response = await this.api.swap();
+                    const response = await this.api.swap(this.aiLevel);
 
                     if (response && response.success) {
                         // 重置本地游戏状态

@@ -45,12 +45,16 @@ def init_game():
     try:
         data = request.json
         is_first = data.get('first', True)
+        difficulty = data.get('difficulty', 'medium')
         
-        logging.info(f"初始化游戏 - 玩家选择先手: {is_first}")
+        logging.info(f"初始化游戏 - 玩家选择先手: {is_first}, 难度: {difficulty}")
         
         # 重置游戏
         global game
         game = Game()
+        
+        # 设置AI难度
+        game.set_difficulty(difficulty)
         
         if is_first:
             # 如果前端选择先手，则后端为后手
@@ -87,11 +91,15 @@ def make_move():
     try:
         data = request.json
         move_str = data.get('move')
+        difficulty = data.get('difficulty', 'medium')
         
         if not move_str:
             return jsonify({'error': 'No move provided'}), 400
         
-        logging.info(f"收到玩家移动请求: {move_str}")
+        logging.info(f"收到玩家移动请求: {move_str}, 难度: {difficulty}")
+        
+        # 更新AI难度
+        game.set_difficulty(difficulty)
         
         # 解析前端移动
         move = game._parse_move(move_str)
@@ -152,7 +160,12 @@ def make_move():
 def get_ai_move():
     """获取AI的下一步移动"""
     try:
-        logging.info("直接请求AI移动")
+        difficulty = request.args.get('difficulty', 'medium')
+        logging.info(f"直接请求AI移动，难度: {difficulty}")
+        
+        # 更新AI难度
+        game.set_difficulty(difficulty)
+        
         ai_move = game.get_ai_move()
         
         if not ai_move:
@@ -182,6 +195,11 @@ def swap():
     """处理交换规则"""
     try:
         logging.info("收到交换规则请求")
+        data = request.json or {}
+        difficulty = data.get('difficulty', 'medium')
+        
+        logging.info(f"交换规则请求，难度: {difficulty}")
+        game.set_difficulty(difficulty)
         
         # 确保只有在第一步后才能交换
         if len(game.move_history) != 1:
