@@ -17,7 +17,9 @@ createApp({
             aiLevel: 'medium',
             redColor: '#FF5252',
             blueColor: '#4285F4',
-            isAIThinking: false
+            isAIThinking: false,
+            lastCanvasWidth: 0,
+            lastCanvasHeight: 0
         };
     },
     mounted() {
@@ -26,6 +28,10 @@ createApp({
         this.game = new HexGame(this.hexBoard);
         this.api = new HexAPI();
 
+        // 捕获初始尺寸
+        this.lastCanvasWidth = canvas.width;
+        this.lastCanvasHeight = canvas.height;
+
         window.addEventListener('resize', this.resizeCanvas);
         this.resizeCanvas();
     },
@@ -33,9 +39,24 @@ createApp({
         resizeCanvas() {
             const canvas = document.getElementById('hexBoard');
             const container = canvas.parentElement;
-            canvas.width = container.clientWidth;
-            canvas.height = container.clientWidth * 0.75;
-            this.hexBoard.init();
+
+            // 计算新的宽度，保持与容器一致
+            const newWidth = container.clientWidth;
+            // 计算新的高度，保持原始宽高比
+            const newHeight = Math.floor(newWidth * 0.75);
+
+            // 只有当尺寸真正变化时才重新设置
+            if (newWidth !== this.lastCanvasWidth || newHeight !== this.lastCanvasHeight) {
+                canvas.width = newWidth;
+                canvas.height = newHeight;
+                this.lastCanvasWidth = newWidth;
+                this.lastCanvasHeight = newHeight;
+
+                // 重新绘制棋盘但保留棋子状态
+                this.hexBoard.init();
+
+                console.log(`Canvas resized to ${newWidth}x${newHeight}`);
+            }
         },
 
         async newGame() {

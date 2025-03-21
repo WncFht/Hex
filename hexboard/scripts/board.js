@@ -11,11 +11,19 @@ class HexBoard {
 
         this.offsetX = 100;
         this.offsetY = 50;
+        this.initialWidth = 0;
+        this.initialHeight = 0;
 
         this.init();
     }
 
     init() {
+        // 保存初始画布尺寸
+        if (this.initialWidth === 0) {
+            this.initialWidth = this.canvas.width;
+            this.initialHeight = this.canvas.height;
+        }
+
         this.clear();
         this.adjustDimensions();
         this.drawBoard();
@@ -27,17 +35,25 @@ class HexBoard {
 
     // 根据棋盘大小自动调整尺寸
     adjustDimensions() {
-        // 调整六边形大小
-        const maxWidth = this.canvas.width - 2 * this.offsetX;
-        const maxHeight = this.canvas.height - 2 * this.offsetY;
+        // 计算可用空间
+        const availableWidth = this.canvas.width * 0.9;  // 留出10%边距
+        const availableHeight = this.canvas.height * 0.9; // 留出10%边距
 
-        // 计算合适的六边形大小
-        const widthConstraint = maxWidth / (this.size * 1.5);
-        const heightConstraint = maxHeight / (this.size * Math.sqrt(3));
+        // 计算棋盘网格需要的总宽度和高度
+        const gridWidth = (this.size + 0.5) * 1.5; // 水平方向需要的单位数
+        const gridHeight = this.size * Math.sqrt(3); // 垂直方向需要的单位数
 
-        this.hexSize = Math.min(widthConstraint, heightConstraint, 30); // 最大不超过30px
+        // 计算每个单位的大小
+        const unitWidth = availableWidth / gridWidth;
+        const unitHeight = availableHeight / gridHeight;
 
-        // 调整偏移量，确保棋盘居中
+        // 选择较小的值作为六边形大小，确保棋盘完全适应画布
+        this.hexSize = Math.min(unitWidth, unitHeight / Math.sqrt(3));
+
+        // 设置一个最小和最大限制，防止太小或太大
+        this.hexSize = Math.max(12, Math.min(this.hexSize, 35));
+
+        // 计算偏移量使棋盘居中
         const boardWidth = this.hexSize * 1.5 * this.size;
         const boardHeight = this.hexSize * Math.sqrt(3) * this.size;
 
@@ -154,8 +170,9 @@ class HexBoard {
             }
         }
 
-        // 只有在一定距离内才返回
-        if (closestDist <= this.hexSize * 1.2) {
+        // 使用动态阈值，根据hexSize计算合理的点击范围
+        const clickThreshold = this.hexSize * 1.5; // 点击范围为六边形大小的1.5倍
+        if (closestDist <= clickThreshold) {
             return closestHex;
         }
 
