@@ -19,7 +19,8 @@ createApp({
             blueColor: '#4285F4',
             isAIThinking: false,
             lastCanvasWidth: 0,
-            lastCanvasHeight: 0
+            lastCanvasHeight: 0,
+            showRules: false
         };
     },
     mounted() {
@@ -62,6 +63,7 @@ createApp({
         async newGame() {
             // 重置本地游戏状态
             this.game.resetGame();
+            this.hexBoard.lastMove = null; // 重置最后一步高亮
 
             if (this.gameMode === 'ai') {
                 // 在人机对弈模式下，初始化后端游戏
@@ -75,6 +77,8 @@ createApp({
                         const moveCoord = this.game.parseMove(response.move);
                         if (moveCoord) {
                             this.game.makeMove(moveCoord.row, moveCoord.col);
+                            // 记录AI的最后一步用于高亮
+                            this.hexBoard.lastMove = { row: moveCoord.row, col: moveCoord.col };
                         }
                     }
                 }
@@ -103,9 +107,9 @@ createApp({
             // 人人对弈模式下直接处理本地逻辑
             if (this.gameMode === 'human') {
                 if (this.game.makeMove(row, col)) {
+                    // 记录最后一步用于高亮
+                    this.hexBoard.lastMove = { row, col };
                     this.updateGameState();
-
-                    // 对于人人对弈，需要模拟判断胜负（可选），这里假设没有胜负逻辑
                 }
                 return;
             }
@@ -113,6 +117,8 @@ createApp({
             // 人机对弈模式
             // 首先在本地执行落子
             if (this.game.makeMove(row, col)) {
+                // 记录玩家的最后一步用于高亮
+                this.hexBoard.lastMove = { row, col };
                 this.updateGameState();
 
                 if (!this.game.gameOver) {
@@ -128,6 +134,8 @@ createApp({
                                 const aiMoveCoord = this.game.parseMove(response.move);
                                 if (aiMoveCoord) {
                                     this.game.makeMove(aiMoveCoord.row, aiMoveCoord.col);
+                                    // 记录AI的最后一步用于高亮
+                                    this.hexBoard.lastMove = { row: aiMoveCoord.row, col: aiMoveCoord.col };
                                 }
                             }
 
@@ -166,7 +174,18 @@ createApp({
             if (this.gameMode === 'ai') return false;
 
             if (this.game.undo()) {
+                // 更新最后一步高亮
+                const historyLength = this.game.moveHistory.length;
+                if (historyLength > 0) {
+                    const lastMoveData = this.game.moveHistory[historyLength - 1];
+                    this.hexBoard.lastMove = { row: lastMoveData.row, col: lastMoveData.col };
+                } else {
+                    this.hexBoard.lastMove = null;
+                }
+
                 this.updateGameState();
+                // 重绘棋盘以更新高亮
+                this.hexBoard.init();
             }
         },
 
@@ -176,6 +195,9 @@ createApp({
             if (this.gameMode === 'human') {
                 // 人人对弈模式下，直接在前端执行交换
                 if (this.game.swap()) {
+                    // 更新最后一步高亮
+                    const firstMove = this.game.moveHistory[0];
+                    this.hexBoard.lastMove = { row: firstMove.row, col: firstMove.col };
                     this.updateGameState();
                 }
             } else {
@@ -188,12 +210,14 @@ createApp({
                     if (response && response.success) {
                         // 重置本地游戏状态
                         this.game.resetGame();
+                        this.hexBoard.lastMove = null;
 
                         // 应用对称移动
                         if (response.symmetric_move) {
                             const moveCoord = this.game.parseMove(response.symmetric_move);
                             if (moveCoord) {
                                 this.game.makeMove(moveCoord.row, moveCoord.col);
+                                this.hexBoard.lastMove = { row: moveCoord.row, col: moveCoord.col };
                             }
                         }
 
@@ -202,6 +226,8 @@ createApp({
                             const aiMoveCoord = this.game.parseMove(response.move);
                             if (aiMoveCoord) {
                                 this.game.makeMove(aiMoveCoord.row, aiMoveCoord.col);
+                                // 记录AI的最后一步用于高亮
+                                this.hexBoard.lastMove = { row: aiMoveCoord.row, col: aiMoveCoord.col };
                             }
                         }
 
@@ -216,8 +242,27 @@ createApp({
         },
 
         goToMove(index) {
-            // 实现回到历史特定步骤的功能
-            // 代码实现略
+            // 当用户点击历史记录中的某一步时，跳转到该状态
+            if (index >= 0 && index < this.moveHistory.length) {
+                // 重置游戏
+                this.game.resetGame();
+                this.hexBoard.lastMove = null;
+
+                // 重放到指定步骤
+                for (let i = 0; i <= index; i++) {
+                    const moveStr = this.moveHistory[i];
+                    const moveCoord = this.game.parseMove(moveStr);
+                    if (moveCoord) {
+                        this.game.makeMove(moveCoord.row, moveCoord.col);
+                        if (i === index) {
+                            // 只高亮最后一步
+                            this.hexBoard.lastMove = { row: moveCoord.row, col: moveCoord.col };
+                        }
+                    }
+                }
+
+                this.updateGameState();
+            }
         },
 
         changeBoardSize() {
@@ -228,6 +273,10 @@ createApp({
 
         updateBoardColors() {
             this.hexBoard.updateColors(this.redColor, this.blueColor);
+        },
+
+        toggleRules() {
+            this.showRules = !this.showRules;
         },
 
         saveGame() {
@@ -252,6 +301,16 @@ createApp({
                 try {
                     const gameState = JSON.parse(e.target.result);
                     this.game.loadGameState(gameState);
+
+                    // 更新最后一步高亮
+                    const historyLength = gameState.moveHistory.length;
+                    if (historyLength > 0) {
+                        const lastMove = gameState.moveHistory[historyLength - 1];
+                        this.hexBoard.lastMove = { row: lastMove.row, col: lastMove.col };
+                    } else {
+                        this.hexBoard.lastMove = null;
+                    }
+
                     this.updateGameState();
                 } catch (error) {
                     console.error('Error loading game:', error);

@@ -4,8 +4,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hex棋盘</title>
+    <title>Hex棋盘游戏</title>
     <link rel="stylesheet" href="styles/main.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <script src="https://unpkg.com/vue@3/dist/vue.global.js"></script>
 </head>
 
@@ -14,75 +15,132 @@
         <header>
             <h1>Hex棋盘游戏</h1>
             <div class="game-controls">
-                <button @click="newGame">新游戏</button>
-                <button @click="undo" :disabled="!canUndo">悔棋</button>
-                <button @click="swap" v-if="canSwap">交换</button>
+                <button class="btn-primary" @click="newGame">
+                    <i class="fas fa-play"></i> 新游戏
+                </button>
+                <button class="btn-secondary" @click="undo" :disabled="!canUndo">
+                    <i class="fas fa-undo"></i> 悔棋
+                </button>
+                <button class="btn-primary" @click="swap" v-if="canSwap">
+                    <i class="fas fa-exchange-alt"></i> 交换
+                </button>
             </div>
         </header>
 
-        <div class="game-info">
-            <div class="current-player">
-                当前玩家: <span :class="currentPlayer">{{ currentPlayer === 'R' ? '红方' : '蓝方' }}</span>
+        <div class="game-container">
+            <!-- 左侧棋盘 -->
+            <div class="board-container">
+                <div class="board-inner">
+                    <canvas id="hexBoard" @click="handleBoardClick"></canvas>
+                </div>
             </div>
-            <div class="ai-status" v-if="isAIThinking">AI思考中...</div>
-            <div class="game-status" v-if="gameStatus">{{ gameStatus }}</div>
+
+            <!-- 右侧面板 -->
+            <div class="game-panel">
+                <!-- 游戏状态 -->
+                <div class="panel-section">
+                    <div class="panel-header">游戏状态</div>
+                    <div class="game-info">
+                        <div class="current-player">
+                            当前玩家:
+                            <span v-if="currentPlayer === 'R'">
+                                <span class="player-indicator R"></span>红方
+                            </span>
+                            <span v-else>
+                                <span class="player-indicator B"></span>蓝方
+                            </span>
+                        </div>
+                        <div class="ai-status" v-if="isAIThinking">AI思考中...</div>
+                        <div class="game-status" v-if="gameStatus">{{ gameStatus }}</div>
+                    </div>
+                </div>
+
+                <!-- 历史记录 -->
+                <div class="panel-section">
+                    <div class="panel-header">历史记录</div>
+                    <div class="move-history">
+                        <ul v-if="moveHistory.length > 0">
+                            <li v-for="(move, index) in moveHistory" :key="index" @click="goToMove(index)">
+                                {{ move }}
+                            </li>
+                        </ul>
+                        <p v-else>暂无历史记录</p>
+                    </div>
+                </div>
+
+                <!-- 设置 -->
+                <div class="panel-section">
+                    <div class="panel-header">游戏设置</div>
+                    <div class="settings">
+                        <div class="setting-item">
+                            <label for="boardSize">棋盘大小:</label>
+                            <select id="boardSize" v-model="boardSize" @change="changeBoardSize">
+                                <option value="9">9×9</option>
+                                <option value="11">11×11</option>
+                                <option value="13">13×13</option>
+                            </select>
+                        </div>
+                        <div class="setting-item">
+                            <label for="redColor">
+                                红方颜色:
+                                <span class="color-preview" :style="{backgroundColor: redColor}"></span>
+                            </label>
+                            <input type="color" id="redColor" v-model="redColor" @change="updateBoardColors">
+                        </div>
+                        <div class="setting-item">
+                            <label for="blueColor">
+                                蓝方颜色:
+                                <span class="color-preview" :style="{backgroundColor: blueColor}"></span>
+                            </label>
+                            <input type="color" id="blueColor" v-model="blueColor" @change="updateBoardColors">
+                        </div>
+                        <div class="setting-item">
+                            <label for="gameMode">对弈模式:</label>
+                            <select id="gameMode" v-model="gameMode">
+                                <option value="human">人人对弈</option>
+                                <option value="ai">人机对弈</option>
+                            </select>
+                        </div>
+                        <div class="setting-item" v-if="gameMode === 'ai'">
+                            <label for="aiLevel">AI难度:</label>
+                            <select id="aiLevel" v-model="aiLevel">
+                                <option value="easy">简单</option>
+                                <option value="medium">中等</option>
+                                <option value="hard">困难</option>
+                            </select>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- 文件操作 -->
+                <div class="panel-section">
+                    <div class="panel-header">棋谱操作</div>
+                    <div class="file-operations">
+                        <button class="btn-primary" @click="saveGame">
+                            <i class="fas fa-save"></i> 保存棋谱
+                        </button>
+                        <label for="loadGame" class="file-label">
+                            <i class="fas fa-folder-open"></i> 加载棋谱
+                        </label>
+                        <input type="file" id="loadGame" @change="loadGame" accept=".json">
+                    </div>
+                </div>
+            </div>
         </div>
 
-        <div class="board-container">
-            <canvas id="hexBoard" width="800" height="600" @click="handleBoardClick"></canvas>
-        </div>
-
-        <div class="move-history">
-            <h3>历史记录</h3>
-            <ul>
-                <li v-for="(move, index) in moveHistory" :key="index" @click="goToMove(index)">
-                    {{ index + 1 }}. {{ move }}
-                </li>
-            </ul>
-        </div>
-
-        <div class="settings">
-            <h3>设置</h3>
-            <div class="setting-item">
-                <label>棋盘大小:</label>
-                <select v-model="boardSize" @change="changeBoardSize">
-                    <option value="9">9x9</option>
-                    <option value="11">11x11</option>
-                    <option value="13">13x13</option>
-                </select>
+        <!-- 规则介绍 -->
+        <div class="rules-container">
+            <div class="rules-content">
+                <h3>游戏规则</h3>
+                <p>Hex是一种策略性棋盘游戏，由两位玩家在六边形棋盘上进行对弈。</p>
+                <p>红方目标：在棋盘上形成一条从上到下的连通路径。</p>
+                <p>蓝方目标：在棋盘上形成一条从左到右的连通路径。</p>
+                <p>交换规则：为了平衡先手优势，第二位玩家可以选择在第一步棋后交换颜色。</p>
             </div>
-            <div class="setting-item">
-                <label>红方颜色:</label>
-                <input type="color" v-model="redColor" @change="updateBoardColors">
-            </div>
-            <div class="setting-item">
-                <label>蓝方颜色:</label>
-                <input type="color" v-model="blueColor" @change="updateBoardColors">
-            </div>
-            <div class="setting-item">
-                <label>对弈模式:</label>
-                <select v-model="gameMode">
-                    <option value="human">人人对弈</option>
-                    <option value="ai">人机对弈</option>
-                </select>
-            </div>
-            <div class="setting-item" v-if="gameMode === 'ai'">
-                <label>AI难度:</label>
-                <select v-model="aiLevel">
-                    <option value="easy">简单</option>
-                    <option value="medium">中等</option>
-                    <option value="hard">困难</option>
-                </select>
-            </div>
-        </div>
-
-        <div class="file-operations">
-            <button @click="saveGame">保存棋谱</button>
-            <input type="file" @change="loadGame" accept=".json">
         </div>
 
         <footer>
-            <p>规则：红方需要垂直连通，蓝方需要水平连通</p>
+            <p>© 2023 Hex棋盘游戏 | 开发者：Game Team</p>
         </footer>
     </div>
 

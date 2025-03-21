@@ -14,6 +14,15 @@ class HexBoard {
         this.initialWidth = 0;
         this.initialHeight = 0;
 
+        // 棋盘样式参数
+        this.gridLineWidth = 1.5;
+        this.gridLineColor = '#333333';
+        this.backgroundColor = '#FFFFFF';
+        this.coordinateColor = '#555555';
+        this.showCoordinates = true;
+        this.highlightLastMove = true;
+        this.lastMove = null;
+
         this.init();
     }
 
@@ -51,7 +60,7 @@ class HexBoard {
         this.hexSize = Math.min(unitWidth, unitHeight / Math.sqrt(3));
 
         // 设置一个最小和最大限制，防止太小或太大
-        this.hexSize = Math.max(12, Math.min(this.hexSize, 35));
+        this.hexSize = Math.max(12, Math.min(this.hexSize, 40));
 
         // 计算偏移量使棋盘居中
         const boardWidth = this.hexSize * 1.5 * this.size;
@@ -62,6 +71,10 @@ class HexBoard {
     }
 
     drawBoard() {
+        // 绘制背景
+        this.ctx.fillStyle = this.backgroundColor;
+        this.ctx.fillRect(0, 0, this.canvas.width, this.canvas.height);
+
         // 绘制棋盘边界
         this.ctx.fillStyle = this.redColor;
         this.drawBoardEdges('red');
@@ -73,13 +86,17 @@ class HexBoard {
         for (let r = 0; r < this.size; r++) {
             for (let c = 0; c < this.size; c++) {
                 this.drawHex(r, c);
-                this.drawCoordinate(r, c);
+                if (this.showCoordinates) {
+                    this.drawCoordinate(r, c);
+                }
             }
         }
     }
 
     drawBoardEdges(color) {
         // 绘制棋盘边框
+        const edgeSize = this.hexSize * 0.6;
+
         if (color === 'red') {
             // 绘制红色的上下边界
             for (let c = 0; c < this.size; c++) {
@@ -87,8 +104,15 @@ class HexBoard {
                 const bottomHex = this.getHexCenter(this.size - 1, c);
 
                 this.ctx.fillStyle = this.redColor;
-                this.ctx.fillRect(topHex.x - 10, topHex.y - 40, 20, 10);
-                this.ctx.fillRect(bottomHex.x - 10, bottomHex.y + 30, 20, 10);
+                // 上边界 - 半圆形
+                this.ctx.beginPath();
+                this.ctx.arc(topHex.x, topHex.y - this.hexSize - 10, edgeSize, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // 下边界 - 半圆形
+                this.ctx.beginPath();
+                this.ctx.arc(bottomHex.x, bottomHex.y + this.hexSize + 10, edgeSize, 0, Math.PI * 2);
+                this.ctx.fill();
             }
         } else {
             // 绘制蓝色的左右边界
@@ -97,8 +121,15 @@ class HexBoard {
                 const rightHex = this.getHexCenter(r, this.size - 1);
 
                 this.ctx.fillStyle = this.blueColor;
-                this.ctx.fillRect(leftHex.x - 40, leftHex.y - 10, 10, 20);
-                this.ctx.fillRect(rightHex.x + 30, rightHex.y - 10, 10, 20);
+                // 左边界 - 半圆形
+                this.ctx.beginPath();
+                this.ctx.arc(leftHex.x - this.hexSize - 10, leftHex.y, edgeSize, 0, Math.PI * 2);
+                this.ctx.fill();
+
+                // 右边界 - 半圆形
+                this.ctx.beginPath();
+                this.ctx.arc(rightHex.x + this.hexSize + 10, rightHex.y, edgeSize, 0, Math.PI * 2);
+                this.ctx.fill();
             }
         }
     }
@@ -106,6 +137,7 @@ class HexBoard {
     drawHex(row, col) {
         const { x, y } = this.getHexCenter(row, col);
         const color = this.board[row][col];
+        const isLastMove = this.lastMove && this.lastMove.row === row && this.lastMove.col === col;
 
         this.ctx.beginPath();
         for (let i = 0; i < 6; i++) {
@@ -125,23 +157,55 @@ class HexBoard {
         if (color) {
             this.ctx.fillStyle = color === 'R' ? this.redColor : this.blueColor;
             this.ctx.fill();
+
+            // 高光效果
+            this.ctx.save();
+            this.ctx.beginPath();
+            for (let i = 0; i < 6; i++) {
+                const angle = (i * 60) * Math.PI / 180;
+                const xPos = x + this.hexSize * 0.7 * Math.cos(angle);
+                const yPos = y + this.hexSize * 0.7 * Math.sin(angle);
+
+                if (i === 0) {
+                    this.ctx.moveTo(xPos, yPos);
+                } else {
+                    this.ctx.lineTo(xPos, yPos);
+                }
+            }
+            this.ctx.closePath();
+
+            this.ctx.fillStyle = color === 'R' ?
+                'rgba(255, 255, 255, 0.3)' : 'rgba(255, 255, 255, 0.3)';
+            this.ctx.fill();
+            this.ctx.restore();
         } else {
             this.ctx.fillStyle = '#FFFFFF';
             this.ctx.fill();
         }
 
-        this.ctx.strokeStyle = '#000000';
-        this.ctx.stroke();
+        // 如果是最后一步，绘制高亮
+        if (isLastMove && this.highlightLastMove) {
+            this.ctx.save();
+            this.ctx.strokeStyle = '#FFD700';
+            this.ctx.lineWidth = 2.5;
+            this.ctx.stroke();
+            this.ctx.restore();
+        } else {
+            this.ctx.strokeStyle = this.gridLineColor;
+            this.ctx.lineWidth = this.gridLineWidth;
+            this.ctx.stroke();
+        }
     }
 
     drawCoordinate(row, col) {
         const { x, y } = this.getHexCenter(row, col);
         const coordStr = `${String.fromCharCode(97 + col)}${row + 1}`;
 
-        this.ctx.fillStyle = '#000000';
-        this.ctx.font = `${Math.max(10, this.hexSize / 2)}px Arial`;
+        this.ctx.fillStyle = this.coordinateColor;
+        this.ctx.font = `${Math.max(10, this.hexSize / 3)}px Arial`;
         this.ctx.textAlign = 'center';
-        this.ctx.fillText(coordStr, x, y + 3);
+        this.ctx.textBaseline = 'middle';
+        this.ctx.fillText(coordStr, x, y);
     }
 
     getHexCenter(row, col) {
@@ -182,6 +246,8 @@ class HexBoard {
     placeStone(row, col, color) {
         if (row >= 0 && row < this.size && col >= 0 && col < this.size) {
             this.board[row][col] = color;
+            // 记录最后一步
+            this.lastMove = { row, col };
             this.drawHex(row, col);
             return true;
         }
@@ -197,6 +263,7 @@ class HexBoard {
     resize(newSize) {
         this.size = newSize;
         this.board = Array(newSize).fill().map(() => Array(newSize).fill(null));
+        this.lastMove = null;
         this.init();
     }
 }

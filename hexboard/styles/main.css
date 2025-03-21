@@ -1,226 +1,492 @@
-/* main.css */
+/* main.css - 现代化设计的Hex棋盘界面 */
+:root {
+  --primary-color: #4285F4;
+  --primary-dark: #3367d6;
+  --red-player: #FF5252;
+  --blue-player: #4285F4;
+  --background: #f9f9f9;
+  --card-bg: #ffffff;
+  --text-color: #333333;
+  --border-color: #e0e0e0;
+  --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+  --hover-shadow: 0 6px 16px rgba(0, 0, 0, 0.12);
+  --header-height: 64px;
+  --sidebar-width: 280px;
+  --transition: all 0.3s ease;
+}
+
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
-    font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 body {
-    background-color: #f5f5f5;
-    color: #333;
-    line-height: 1.6;
+  background-color: var(--background);
+  color: var(--text-color);
+  line-height: 1.6;
+  font-size: 16px;
+  overflow-x: hidden;
 }
 
+/* 应用容器 */
 #app {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 20px;
+  display: grid;
+  grid-template-columns: 1fr;
+  grid-template-rows: auto 1fr auto;
+  min-height: 100vh;
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 0;
 }
 
-/* 头部样式 */
+/* 顶部导航 */
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding-bottom: 10px;
-    border-bottom: 1px solid #ddd;
+  background: var(--card-bg);
+  box-shadow: var(--shadow);
+  padding: 15px 24px;
+  border-bottom: 1px solid var(--border-color);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
 }
 
 h1 {
-    color: #333;
+  font-size: 1.8rem;
+  color: var(--text-color);
+  font-weight: 600;
+  margin: 0;
+  background: linear-gradient(45deg, var(--red-player), var(--blue-player));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  text-fill-color: transparent;
 }
 
-.game-controls {
-    display: flex;
-    gap: 10px;
+/* 主内容区域 - 网格布局 */
+.game-container {
+  display: grid;
+  grid-template-columns: 1fr 280px;
+  gap: 24px;
+  padding: 24px;
+  align-items: start;
 }
 
-button {
-    padding: 8px 16px;
-    background-color: #4285F4;
-    color: white;
-    border: none;
-    border-radius: 4px;
-    cursor: pointer;
-    font-size: 14px;
-    transition: background-color 0.3s;
-}
-
-button:hover {
-    background-color: #3367d6;
-}
-
-button:disabled {
-    background-color: #cccccc;
-    cursor: not-allowed;
-}
-
-/* 游戏信息区域 */
-.game-info {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-bottom: 20px;
-    padding: 10px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.current-player {
-    font-weight: bold;
-}
-
-.current-player .R {
-    color: #FF5252;
-}
-
-.current-player .B {
-    color: #4285F4;
-}
-
-.ai-status {
-    color: #F57C00;
-    font-weight: bold;
-    animation: blink 1s infinite;
-}
-
-@keyframes blink {
-    0% { opacity: 1; }
-    50% { opacity: 0.5; }
-    100% { opacity: 1; }
-}
-
-.game-status {
-    color: #4CAF50;
-    font-weight: bold;
-}
-
-/* 棋盘容器 */
+/* 棋盘部分 */
 .board-container {
-    width: 100%;
-    height: 500px;
-    margin-bottom: 20px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
+  grid-column: 1;
+  background: var(--card-bg);
+  border-radius: 12px;
+  box-shadow: var(--shadow);
+  overflow: hidden;
+  position: relative;
+  transition: var(--transition);
+  aspect-ratio: 4/3;
+  max-height: 80vh;
+}
+
+.board-container:hover {
+  box-shadow: var(--hover-shadow);
+}
+
+.board-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
 }
 
 canvas {
-    display: block;
-    width: 100%;
-    height: 100%;
-    cursor: pointer;
+  display: block;
+  width: 100%;
+  height: 100%;
+  cursor: pointer;
+}
+
+/* 游戏信息面板 */
+.game-panel {
+  grid-column: 2;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  position: sticky;
+  top: calc(var(--header-height) + 24px);
+}
+
+.panel-section {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  transition: var(--transition);
+}
+
+.panel-section:hover {
+  box-shadow: var(--hover-shadow);
+}
+
+.panel-header {
+  font-size: 1.2rem;
+  font-weight: 600;
+  margin-bottom: 16px;
+  padding-bottom: 10px;
+  border-bottom: 1px solid var(--border-color);
+  color: var(--text-color);
+}
+
+/* 游戏状态 */
+.game-info {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.current-player {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-weight: 500;
+}
+
+.player-indicator {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  display: inline-block;
+  margin-right: 6px;
+}
+
+.player-indicator.R {
+  background-color: var(--red-player);
+  box-shadow: 0 0 8px rgba(255, 82, 82, 0.4);
+}
+
+.player-indicator.B {
+  background-color: var(--blue-player);
+  box-shadow: 0 0 8px rgba(66, 133, 244, 0.4);
+}
+
+.ai-status {
+  color: #F57C00;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: pulse 1.5s infinite;
+}
+
+@keyframes pulse {
+  0% { opacity: 1; }
+  50% { opacity: 0.6; }
+  100% { opacity: 1; }
+}
+
+.ai-status:before {
+  content: '';
+  display: inline-block;
+  width: 10px;
+  height: 10px;
+  border-radius: 50%;
+  background-color: #F57C00;
+}
+
+.game-status {
+  color: #4CAF50;
+  font-weight: 500;
+  padding: 8px 12px;
+  background-color: rgba(76, 175, 80, 0.1);
+  border-radius: 6px;
+  text-align: center;
+}
+
+/* 按钮组 */
+.game-controls {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+button {
+  padding: 10px 16px;
+  border: none;
+  border-radius: 6px;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-primary {
+  background-color: var(--primary-color);
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background-color: var(--primary-dark);
+  transform: translateY(-2px);
+}
+
+.btn-secondary {
+  background-color: #f2f2f2;
+  color: var(--text-color);
+}
+
+.btn-secondary:hover:not(:disabled) {
+  background-color: #e6e6e6;
+  transform: translateY(-2px);
+}
+
+.btn-danger {
+  background-color: #f44336;
+  color: white;
+}
+
+.btn-danger:hover:not(:disabled) {
+  background-color: #d32f2f;
+  transform: translateY(-2px);
+}
+
+button:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+  transform: none !important;
+}
+
+button:active:not(:disabled) {
+  transform: translateY(0);
 }
 
 /* 历史记录 */
 .move-history {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  max-height: 300px;
+  overflow-y: auto;
+  scrollbar-width: thin;
 }
 
-.move-history h3 {
-    margin-bottom: 10px;
-    color: #333;
+.move-history::-webkit-scrollbar {
+  width: 6px;
+}
+
+.move-history::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 3px;
+}
+
+.move-history::-webkit-scrollbar-thumb {
+  background: #ccc;
+  border-radius: 3px;
+}
+
+.move-history::-webkit-scrollbar-thumb:hover {
+  background: #aaa;
 }
 
 .move-history ul {
-    list-style: none;
-    max-height: 200px;
-    overflow-y: auto;
+  list-style: none;
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+  gap: 8px;
 }
 
 .move-history li {
-    padding: 5px 10px;
-    cursor: pointer;
-    border-bottom: 1px solid #f0f0f0;
+  padding: 8px;
+  background-color: #f7f7f7;
+  border-radius: 6px;
+  text-align: center;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: 1px solid var(--border-color);
 }
 
 .move-history li:hover {
-    background-color: #f5f5f5;
+  background-color: #eaeaea;
+  transform: translateY(-2px);
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
 }
 
-/* 设置区域 */
+/* 设置 */
 .settings {
-    margin-bottom: 20px;
-    padding: 15px;
-    background-color: #fff;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-}
-
-.settings h3 {
-    margin-bottom: 10px;
-    color: #333;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
 }
 
 .setting-item {
-    margin-bottom: 10px;
-    display: flex;
-    align-items: center;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
 }
 
 .setting-item label {
-    width: 100px;
-    display: inline-block;
+  font-weight: 500;
+  font-size: 0.9rem;
+  color: #555;
 }
 
-.setting-item select, .setting-item input {
-    padding: 5px;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+.setting-item select,
+.setting-item input {
+  padding: 10px;
+  border: 1px solid var(--border-color);
+  border-radius: 6px;
+  background-color: #f9f9f9;
+  font-size: 14px;
+  transition: all 0.2s ease;
+}
+
+.setting-item select:focus,
+.setting-item input:focus {
+  border-color: var(--primary-color);
+  outline: none;
+  box-shadow: 0 0 0 3px rgba(66, 133, 244, 0.1);
+}
+
+.color-preview {
+  display: inline-block;
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  margin-left: 8px;
+  vertical-align: middle;
+  border: 1px solid var(--border-color);
 }
 
 /* 文件操作 */
 .file-operations {
-    display: flex;
-    gap: 10px;
-    margin-bottom: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
 }
 
 .file-operations input[type="file"] {
-    padding: 8px;
-    background-color: #f5f5f5;
-    border: 1px solid #ddd;
-    border-radius: 4px;
+  display: none;
+}
+
+.file-label {
+  display: inline-block;
+  padding: 10px 16px;
+  background-color: #f2f2f2;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  text-align: center;
+}
+
+.file-label:hover {
+  background-color: #e6e6e6;
+  transform: translateY(-2px);
+}
+
+/* 规则说明和页脚 */
+.rules-container {
+  margin: 20px 0;
+  padding: 0 24px;
+}
+
+.rules-toggle {
+  background: none;
+  border: none;
+  color: var(--primary-color);
+  cursor: pointer;
+  font-weight: 500;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  margin-bottom: 12px;
+  padding: 0;
+}
+
+.rules-content {
+  background: var(--card-bg);
+  border-radius: 12px;
+  padding: 20px;
+  box-shadow: var(--shadow);
+  margin-top: 12px;
+}
+
+.rules-content h3 {
+  margin-bottom: 12px;
+  font-size: 1.2rem;
+  color: var(--text-color);
+}
+
+.rules-content p {
+  margin-bottom: 12px;
+}
+
+footer {
+  text-align: center;
+  padding: 20px;
+  background-color: var(--card-bg);
+  border-top: 1px solid var(--border-color);
+  color: #666;
+  margin-top: auto;
 }
 
 /* 响应式设计 */
-@media (max-width: 768px) {
-    header {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .game-controls {
-        margin-top: 10px;
-    }
-    
-    .board-container {
-        height: 350px;
-    }
-    
-    .setting-item {
-        flex-direction: column;
-        align-items: flex-start;
-    }
-    
-    .setting-item label {
-        margin-bottom: 5px;
-    }
+@media (max-width: 900px) {
+  .game-container {
+    grid-template-columns: 1fr;
+  }
+  
+  .board-container {
+    grid-column: 1;
+    aspect-ratio: 1/1;
+  }
+  
+  .game-panel {
+    grid-column: 1;
+    position: static;
+  }
+  
+  header {
+    padding: 12px 16px;
+  }
+  
+  h1 {
+    font-size: 1.5rem;
+  }
+  
+  .game-controls {
+    flex-wrap: wrap;
+  }
+  
+  button {
+    padding: 8px 12px;
+    font-size: 14px;
+  }
 }
 
-/* 页脚 */
-footer {
-    text-align: center;
-    margin-top: 20px;
-    padding-top: 10px;
-    border-top: 1px solid #ddd;
-    color: #666;
+/* 切换动画 */
+.fade-enter-active, .fade-leave-active {
+  transition: opacity 0.3s;
+}
+.fade-enter-from, .fade-leave-to {
+  opacity: 0;
+}
+
+/* 添加响应式字体大小 */
+@media (max-width: 600px) {
+  body {
+    font-size: 14px;
+  }
+  
+  h1 {
+    font-size: 1.3rem;
+  }
+  
+  .panel-header {
+    font-size: 1.1rem;
+  }
+  
+  .setting-item label {
+    font-size: 0.8rem;
+  }
 }
