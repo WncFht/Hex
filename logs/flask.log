@@ -473,3 +473,41 @@ INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:43:25] "[36mGET /scripts/app.js HTT
 2025-03-22 04:43:25,697 - INFO - 127.0.0.1 - - [22/Mar/2025 04:43:25] "[36mGET /scripts/api.js HTTP/1.1[0m" 304 -
 2025-03-22 04:43:25,697 - INFO - 127.0.0.1 - - [22/Mar/2025 04:43:25] "[36mGET /scripts/app.js HTTP/1.1[0m" 304 -
 2025-03-22 04:43:25,697 - INFO - 127.0.0.1 - - [22/Mar/2025 04:43:25] "[36mGET /scripts/app.js HTTP/1.1[0m" 304 -
+ * Serving Flask app 'app'
+ * Debug mode: on
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-22 04:45:37,159 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-22 04:45:37,159 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+2025-03-22 04:45:37,159 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-22 04:45:37,159 - INFO - [33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+2025-03-22 04:45:37,167 - INFO -  * Restarting with watchdog (windowsapi)
+2025-03-22 04:45:37,167 - INFO -  * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+2025-03-22 04:45:37,396 - WARNING -  * Debugger is active!
+2025-03-22 04:45:37,396 - WARNING -  * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 139-310-071
+2025-03-22 04:45:37,399 - INFO -  * Debugger PIN: 139-310-071
+2025-03-22 04:45:37,399 - INFO -  * Debugger PIN: 139-310-071
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET / HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,371 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET / HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,371 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET / HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:45:40] "GET /styles/main.css HTTP/1.1" 200 -
+2025-03-22 04:45:40,411 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "GET /styles/main.css HTTP/1.1" 200 -
+2025-03-22 04:45:40,411 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "GET /styles/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:45:40] "GET /scripts/board.js HTTP/1.1" 200 -
+2025-03-22 04:45:40,595 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "GET /scripts/board.js HTTP/1.1" 200 -
+2025-03-22 04:45:40,595 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "GET /scripts/board.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/game.js HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,727 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/game.js HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,727 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/game.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/api.js HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,727 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/api.js HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,727 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/api.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/app.js HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,728 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/app.js HTTP/1.1[0m" 304 -
+2025-03-22 04:45:40,728 - INFO - 127.0.0.1 - - [22/Mar/2025 04:45:40] "[36mGET /scripts/app.js HTTP/1.1[0m" 304 -
