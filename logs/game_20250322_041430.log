@@ -1,0 +1,48 @@
+2025-03-22 04:14:30,260 - INFO - Game initialized with board size 11
+2025-03-22 04:14:30,260 - INFO - µ±Ç°ÆåÅÌ×´Ì¬:
+
+   a b c d e f g h i j k 
+ 1 . . . . . . . . . . . 
+  2 . . . . . . . . . . . 
+   3 . . . . . . . . . . . 
+    4 . . . . . . . . . . . 
+     5 . . . . . . . . . . . 
+      6 . . . . . . . . . . . 
+       7 . . . . . . . . . . . 
+        8 . . . . . . . . . . . 
+         9 . . . . . . . . . . . 
+         10 . . . . . . . . . . . 
+          11 . . . . . . . . . . . 
+
+2025-03-22 04:14:30,262 - INFO - Æô¶¯FlaskÓ¦ÓÃ£¬¶Ë¿Ú:5000
+2025-03-22 04:14:30,281 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-22 04:14:30,290 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-22 04:14:30,292 - INFO -  * Restarting with stat
+2025-03-22 04:14:30,487 - INFO - Game initialized with board size 11
+2025-03-22 04:14:30,487 - INFO - µ±Ç°ÆåÅÌ×´Ì¬:
+
+   a b c d e f g h i j k 
+ 1 . . . . . . . . . . . 
+  2 . . . . . . . . . . . 
+   3 . . . . . . . . . . . 
+    4 . . . . . . . . . . . 
+     5 . . . . . . . . . . . 
+      6 . . . . . . . . . . . 
+       7 . . . . . . . . . . . 
+        8 . . . . . . . . . . . 
+         9 . . . . . . . . . . . 
+         10 . . . . . . . . . . . 
+          11 . . . . . . . . . . . 
+
+2025-03-22 04:14:30,488 - INFO - Æô¶¯FlaskÓ¦ÓÃ£¬¶Ë¿Ú:5000
+2025-03-22 04:14:30,501 - WARNING -  * Debugger is active!
+2025-03-22 04:14:30,503 - INFO -  * Debugger PIN: 728-339-240
+2025-03-22 04:14:33,491 - INFO - ÇëÇóÊ×Ò³
+2025-03-22 04:14:33,523 - INFO - 127.0.0.1 - - [22/Mar/2025 04:14:33] "[36mGET / HTTP/1.1[0m" 304 -
+2025-03-22 04:14:33,563 - INFO - 127.0.0.1 - - [22/Mar/2025 04:14:33] "[36mGET /styles/main.css HTTP/1.1[0m" 304 -
+2025-03-22 04:14:33,740 - INFO - 127.0.0.1 - - [22/Mar/2025 04:14:33] "GET /scripts/game.js HTTP/1.1" 200 -
+2025-03-22 04:14:33,879 - INFO - 127.0.0.1 - - [22/Mar/2025 04:14:33] "[36mGET /scripts/board.js HTTP/1.1[0m" 304 -
+2025-03-22 04:14:33,879 - INFO - 127.0.0.1 - - [22/Mar/2025 04:14:33] "GET /scripts/api.js HTTP/1.1" 200 -
+2025-03-22 04:14:33,880 - INFO - 127.0.0.1 - - [22/Mar/2025 04:14:33] "GET /scripts/app.js HTTP/1.1" 200 -
+2025-03-22 04:14:40,894 - INFO -  * Detected change in 'C:\\Users\\fanghaotian\\Desktop\\ÍøÒ³112\\ai\\mcts.py', reloading

@@ -1,0 +1,226 @@
+/* main.css */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    font-family: 'Microsoft YaHei', 'PingFang SC', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+}
+
+body {
+    background-color: #f5f5f5;
+    color: #333;
+    line-height: 1.6;
+}
+
+#app {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+}
+
+/* 头部样式 */
+header {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 1px solid #ddd;
+}
+
+h1 {
+    color: #333;
+}
+
+.game-controls {
+    display: flex;
+    gap: 10px;
+}
+
+button {
+    padding: 8px 16px;
+    background-color: #4285F4;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-size: 14px;
+    transition: background-color 0.3s;
+}
+
+button:hover {
+    background-color: #3367d6;
+}
+
+button:disabled {
+    background-color: #cccccc;
+    cursor: not-allowed;
+}
+
+/* 游戏信息区域 */
+.game-info {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 20px;
+    padding: 10px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.current-player {
+    font-weight: bold;
+}
+
+.current-player .R {
+    color: #FF5252;
+}
+
+.current-player .B {
+    color: #4285F4;
+}
+
+.ai-status {
+    color: #F57C00;
+    font-weight: bold;
+    animation: blink 1s infinite;
+}
+
+@keyframes blink {
+    0% { opacity: 1; }
+    50% { opacity: 0.5; }
+    100% { opacity: 1; }
+}
+
+.game-status {
+    color: #4CAF50;
+    font-weight: bold;
+}
+
+/* 棋盘容器 */
+.board-container {
+    width: 100%;
+    height: 500px;
+    margin-bottom: 20px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
+}
+
+canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    cursor: pointer;
+}
+
+/* 历史记录 */
+.move-history {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.move-history h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.move-history ul {
+    list-style: none;
+    max-height: 200px;
+    overflow-y: auto;
+}
+
+.move-history li {
+    padding: 5px 10px;
+    cursor: pointer;
+    border-bottom: 1px solid #f0f0f0;
+}
+
+.move-history li:hover {
+    background-color: #f5f5f5;
+}
+
+/* 设置区域 */
+.settings {
+    margin-bottom: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.settings h3 {
+    margin-bottom: 10px;
+    color: #333;
+}
+
+.setting-item {
+    margin-bottom: 10px;
+    display: flex;
+    align-items: center;
+}
+
+.setting-item label {
+    width: 100px;
+    display: inline-block;
+}
+
+.setting-item select, .setting-item input {
+    padding: 5px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* 文件操作 */
+.file-operations {
+    display: flex;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.file-operations input[type="file"] {
+    padding: 8px;
+    background-color: #f5f5f5;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+}
+
+/* 响应式设计 */
+@media (max-width: 768px) {
+    header {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .game-controls {
+        margin-top: 10px;
+    }
+    
+    .board-container {
+        height: 350px;
+    }
+    
+    .setting-item {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .setting-item label {
+        margin-bottom: 5px;
+    }
+}
+
+/* 页脚 */
+footer {
+    text-align: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    border-top: 1px solid #ddd;
+    color: #666;
+}

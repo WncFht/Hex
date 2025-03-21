@@ -1,0 +1,47 @@
+ * Serving Flask app 'app'
+ * Debug mode: on
+INFO:werkzeug:[31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-22 04:19:00,852 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+2025-03-22 04:19:00,852 - INFO - [31m[1mWARNING: This is a development server. Do not use it in a production deployment. Use a production WSGI server instead.[0m
+ * Running on http://127.0.0.1:5000
+INFO:werkzeug:[33mPress CTRL+C to quit[0m
+2025-03-22 04:19:00,852 - INFO - [33mPress CTRL+C to quit[0m
+2025-03-22 04:19:00,852 - INFO - [33mPress CTRL+C to quit[0m
+INFO:werkzeug: * Restarting with watchdog (windowsapi)
+2025-03-22 04:19:00,868 - INFO -  * Restarting with watchdog (windowsapi)
+2025-03-22 04:19:00,868 - INFO -  * Restarting with watchdog (windowsapi)
+WARNING:werkzeug: * Debugger is active!
+2025-03-22 04:19:01,097 - WARNING -  * Debugger is active!
+2025-03-22 04:19:01,097 - WARNING -  * Debugger is active!
+INFO:werkzeug: * Debugger PIN: 139-310-071
+2025-03-22 04:19:01,100 - INFO -  * Debugger PIN: 139-310-071
+2025-03-22 04:19:01,100 - INFO -  * Debugger PIN: 139-310-071
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:04] "GET / HTTP/1.1" 200 -
+2025-03-22 04:19:04,074 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "GET / HTTP/1.1" 200 -
+2025-03-22 04:19:04,074 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "GET / HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:04] "GET /styles/main.css HTTP/1.1" 200 -
+2025-03-22 04:19:04,113 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "GET /styles/main.css HTTP/1.1" 200 -
+2025-03-22 04:19:04,113 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "GET /styles/main.css HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:04] "GET /scripts/board.js HTTP/1.1" 200 -
+2025-03-22 04:19:04,311 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "GET /scripts/board.js HTTP/1.1" 200 -
+2025-03-22 04:19:04,311 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "GET /scripts/board.js HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:04] "[36mGET /scripts/game.js HTTP/1.1[0m" 304 -
+2025-03-22 04:19:04,422 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[36mGET /scripts/game.js HTTP/1.1[0m" 304 -
+2025-03-22 04:19:04,422 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[36mGET /scripts/game.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:04] "[36mGET /scripts/api.js HTTP/1.1[0m" 304 -
+2025-03-22 04:19:04,422 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[36mGET /scripts/api.js HTTP/1.1[0m" 304 -
+2025-03-22 04:19:04,422 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[36mGET /scripts/api.js HTTP/1.1[0m" 304 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:04] "[35m[1mGET /scripts/app.js HTTP/1.1[0m" 206 -
+2025-03-22 04:19:04,423 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[35m[1mGET /scripts/app.js HTTP/1.1[0m" 206 -
+2025-03-22 04:19:04,423 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[35m[1mGET /scripts/app.js HTTP/1.1[0m" 206 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:04] "[35m[1mGET /scripts/app.js HTTP/1.1[0m" 206 -
+2025-03-22 04:19:04,732 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[35m[1mGET /scripts/app.js HTTP/1.1[0m" 206 -
+2025-03-22 04:19:04,732 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:04] "[35m[1mGET /scripts/app.js HTTP/1.1[0m" 206 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:35] "POST /api/move HTTP/1.1" 200 -
+2025-03-22 04:19:35,792 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:35] "POST /api/move HTTP/1.1" 200 -
+2025-03-22 04:19:35,792 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:35] "POST /api/move HTTP/1.1" 200 -
+INFO:werkzeug:127.0.0.1 - - [22/Mar/2025 04:19:53] "POST /api/move HTTP/1.1" 200 -
+2025-03-22 04:19:53,389 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:53] "POST /api/move HTTP/1.1" 200 -
+2025-03-22 04:19:53,389 - INFO - 127.0.0.1 - - [22/Mar/2025 04:19:53] "POST /api/move HTTP/1.1" 200 -
